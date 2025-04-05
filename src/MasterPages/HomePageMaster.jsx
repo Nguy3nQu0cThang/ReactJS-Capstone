@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { HeaderHome } from "../component/HeaderHome";
+import  HeaderHome  from "./../component/HeaderHome";
 const HomePageMaster = () => {
   return (
     <div>
