@@ -28,7 +28,7 @@ const Banner = () => {
       <div className="carousel-inner">
         {banners.map((banner, index) => (
           <div className={`carousel-item ${index===0 ? 'active' : ''}`} key={index}>
-            <img src={banner.hinhAnh} className="d-block w-100" alt="Banner" />
+            <img src={banner.hinhAnh} className="d-block w-100 h-50" alt="Banner" />
           </div>
         ))}
       </div>

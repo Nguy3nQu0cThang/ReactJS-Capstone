@@ -46,10 +46,10 @@ const HeaderHome = () => {
         </div>
       </nav>
       <div className="">
-        <Link to="/login" className="btn me-2">
+        <Link to="/login" className="btn btn-primary me-2">
           Đăng Nhập
         </Link>
-        <Link to="/register" className="btn">
+        <Link to="/register" className="btn btn-dark">
           Đăng Ký
         </Link>
       </div>
