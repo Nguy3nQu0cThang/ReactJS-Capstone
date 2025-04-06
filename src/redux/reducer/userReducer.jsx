@@ -1,17 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { http, navigateHistory, setCookie, TOKEN, USER_LOGIN } from '../../utils/setting';
-import {getAPIUserProfileData} from "../../API/apiUser";
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  http,
+  navigateHistory,
+  setCookie,
+  TOKEN,
+  USER_LOGIN,
+} from "../../utils/setting";
+import { getAPIUserProfileData } from "../../API/apiUser";
 
 let getUserLoginDefault = () => {
   if (localStorage.getItem(USER_LOGIN)) {
-    const userDefault = JSON.parse(localStorage.getItem(USER_LOGIN))
-    return userDefault
+    const userDefault = JSON.parse(localStorage.getItem(USER_LOGIN));
+    return userDefault;
   }
-  return null
-}
+  return null;
+};
 
 const initialState = {
-  userRegister: { 
+  userRegister: {
     taiKhoan: "",
     matKhau: "",
     email: "",
@@ -28,38 +34,42 @@ const userReducer = createSlice({
   initialState,
   reducers: {
     handleChangeInputAction: (state, action) => {
-      const { id, value } = action.payload
-      state.userRegister[id] = value
+      const { id, value } = action.payload;
+      state.userRegister[id] = value;
     },
     setUserLoginAction: (state, action) => {
-      state.userLogin = action.payload
+      state.userLogin = action.payload;
     },
     setProfileAction: (state, action) => {
-      state.profile = action.payload
+      state.profile = action.payload;
     },
   },
 });
 
-export const {handleChangeInputAction, setProfileAction,setUserLoginAction} = userReducer.actions
+export const { handleChangeInputAction, setProfileAction, setUserLoginAction } =
+  userReducer.actions;
 
-export default userReducer.reducer
+export default userReducer.reducer;
 
 export const loginAction = (userLoginModel) => {
   return async (dispatch) => {
-    const res = await http.post("https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/DangNhap", userLoginModel)
-    console.log(res.data.content)
-  
-    const token = res.data.content.accessToken
-    localStorage.setItem(TOKEN, token)
-    
-    const userLogin = JSON.stringify(res.data.content)
-    localStorage.setItem(USER_LOGIN, userLogin)
-  
-    setCookie(TOKEN, token, 7)
+    const res = await http.post(
+      "https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/DangNhap",
+      userLoginModel
+    );
+    console.log(res.data.content);
 
-    dispatch(setUserLoginAction(res.data.content))
-  }
-}
+    const token = res.data.content.accessToken;
+    localStorage.setItem(TOKEN, token);
+
+    const userLogin = JSON.stringify(res.data.content);
+    localStorage.setItem(USER_LOGIN, userLogin);
+
+    setCookie(TOKEN, token, 7);
+
+    dispatch(setUserLoginAction(res.data.content));
+  };
+};
 
 export const registerAction = (userRegisterModel) => {
   return async (dispatch) => {
@@ -81,13 +91,12 @@ export const registerAction = (userRegisterModel) => {
   };
 };
 
-
 export const getProfileAction = () => async (dispatch) => {
   try {
-    const res = await http.post(getAPIUserProfileData)
-    dispatch(setProfileAction(res.data.content))
+    const res = await http.post(getAPIUserProfileData);
+    dispatch(setProfileAction(res.data.content));
   } catch (err) {
-    console.log(err)
-    navigateHistory.push("/login")
+    console.log(err);
+    navigateHistory.push("/login");
   }
-}
+};
