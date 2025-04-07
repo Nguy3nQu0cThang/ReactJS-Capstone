@@ -156,4 +156,3 @@ function isTokenExpired(token) {
 
   return expirationDate < currentDate;
 }
-
