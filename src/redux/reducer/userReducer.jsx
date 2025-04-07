@@ -37,10 +37,15 @@ const userReducer = createSlice({
     setProfileAction: (state, action) => {
       state.profile = action.payload
     },
+    logoutAction: (state) => {
+      state.userLogin = null
+      localStorage.removeItem(USER_LOGIN)
+      localStorage.removeItem(TOKEN)
+    }
   },
 });
 
-export const {handleChangeInputAction, setProfileAction,setUserLoginAction} = userReducer.actions
+export const {handleChangeInputAction, setProfileAction,setUserLoginAction, logoutAction} = userReducer.actions
 
 export default userReducer.reducer
 
@@ -61,30 +66,32 @@ export const loginAction = (userLoginModel) => {
   }
 }
 
-export const registerAction = (userRegisterModel) => {
-  return async (dispatch) => {
-    try {
-      const res = await http.post(
-        "https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/DangKy",
-        userRegisterModel
-      );
-      console.log("Đăng ký thành công:", res.data.content);
+// export const registerAction = (userRegisterModel) => {
+//   return async (dispatch) => {
+//     try {
+//       const res = await http.post(
+//         "https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/DangKy",
+//         userRegisterModel
+//       );
+//       console.log("Đăng ký thành công:", res.data.content);
 
-      // Đăng ký xong có thể chuyển hướng sang login nếu muốn:
-      navigateHistory.push("/login");
-    } catch (error) {
-      console.log(
-        "Lỗi đăng ký:",
-        error.response?.data?.message || error.message
-      );
-    }
-  };
-};
+//       // Đăng ký xong có thể chuyển hướng sang login nếu muốn:
+//       navigateHistory.push("/login");
+//     } catch (error) {
+//       console.log(
+//         "Lỗi đăng ký:",
+//         error.response?.data?.message || error.message
+//       );
+//     }
+//   };
+// };
 
 
 export const getProfileAction = () => async (dispatch) => {
   try {
-    const res = await http.post(getAPIUserProfileData)
+    const res = await http.post(
+      "https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01"
+    );
     dispatch(setProfileAction(res.data.content))
   } catch (err) {
     console.log(err)
