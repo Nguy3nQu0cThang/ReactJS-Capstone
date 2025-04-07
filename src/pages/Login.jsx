@@ -27,15 +27,13 @@ const Login = () => {
     },
     onSubmit: async (values) => {
       console.log("From values:", values)
-      try {
+      
         
         const userData = await userLoginAPI(values.taiKhoan, values.matKhau);
         console.log("User Data", userData)
         dispatch(loginAction(userData)); 
         navigate("/profile"); 
-      } catch (error) {
-        console.log("Login failed", error);
-      }
+      
     },
   });
 
