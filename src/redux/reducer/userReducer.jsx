@@ -44,6 +44,7 @@ const userReducer = createSlice({
       state.profile = action.payload;
     },
     logoutAction: (state) => {
+
       state.userLogin = null
       localStorage.removeItem(USER_LOGIN)
       localStorage.removeItem(TOKEN)
@@ -52,6 +53,7 @@ const userReducer = createSlice({
 });
 
 export const {handleChangeInputAction, setProfileAction,setUserLoginAction, logoutAction} = userReducer.actions
+
 
 export default userReducer.reducer;
 

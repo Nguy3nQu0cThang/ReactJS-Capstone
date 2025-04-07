@@ -6,9 +6,11 @@ const HeaderHome = () => {
   const dispatch = useDispatch();
   const { userLogin } = useSelector((state) => state.userReducer);
 
+
   const handleLogout = () => {
     dispatch(logoutAction());
   };
+
   return (
     <div className="d-flex align-items-center justify-content-around">
       <div>

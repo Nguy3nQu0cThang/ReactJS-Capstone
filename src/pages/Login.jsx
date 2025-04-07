@@ -12,9 +12,11 @@ const Login = () => {
       matKhau: "",
     },
     onSubmit: async (values) => {
+
       console.log("From values:", values);
       dispatch(loginAction(values));
       navigate("/");
+
     },
   });
 

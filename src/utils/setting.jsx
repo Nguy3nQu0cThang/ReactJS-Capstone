@@ -119,6 +119,7 @@ http.interceptors.response.use(
   }
 );
 
+
 function decodeJWT(token) {
   try {
     // Tách phần payload từ token (JWT có 3 phần: header.payload.signature)
@@ -155,3 +156,4 @@ function isTokenExpired(token) {
 
   return expirationDate < currentDate;
 }
+
