@@ -13,6 +13,13 @@ export const getAPIQuanLyPhimBanner = async () => {
 };
 
 export const getMovieListAPI = async () => {
-  const res = await http.get(`${apiBase}/LayDanhSachPhim?maNhom=GP01`);
-  return res.data.content;
+
+
+  try {
+    const res = await http.get(`${apiBase}/LayDanhSachPhim?maNhom=GP01`);
+    return res.data.content;
+  } catch (err) {
+    console.log("Error Movie List", err);
+  }
+
 };

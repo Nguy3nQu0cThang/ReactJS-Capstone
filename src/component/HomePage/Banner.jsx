@@ -9,7 +9,6 @@ const Banner = () => {
       try {
         const res = await http.get(
           "https://movienew.cybersoft.edu.vn/api/QuanLyPhim/LayDanhSachBanner",
-          
         );
         setBanners(res.data.content)
       } catch (err) {

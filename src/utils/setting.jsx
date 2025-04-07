@@ -1,18 +1,9 @@
 import axios from "axios";
 import { createBrowserHistory } from "history";
+
 export const navigateHistory = createBrowserHistory();
 export const TOKEN = "accessToken"; // token người dùng
-export const USER_LOGIN = "USER_LOGIN"; // thông tin người dùng
-
-export const TOKEN_CYBERSOFT =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCBTw6FuZyAxNSIsIkhldEhhblN0cmluZyI6IjExLzA5LzIwMjUiLCJIZXRIYW5UaW1lIjoiMTc1NzU0ODgwMDAwMCIsIm5iZiI6MTczMzg1MDAwMCwiZXhwIjoxNzU3Njk2NDAwfQ.5vww18nCtO2mffvALHhzwa38Gyr82SqzU0hb0DLMGx0";
-
-export const DOMAIN = "https://movienew.cybersoft.edu.vn";
-
-export const http = axios.create({
-  baseURL: DOMAIN,
-  timeout: 3000,
-});
+export const USER_LOGIN = "userLogin"; // thông tin người dùng
 
 export function setCookie(name, value, days) {
   var expires = "";
@@ -37,59 +28,31 @@ export function deleteCookie(name) {
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 }
 
-function decodeJWT(token) {
-  try {
-    // Tách phần payload từ token (JWT có 3 phần: header.payload.signature)
-    if (!token) return null;
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
+export const DOMAIN = "https://movienew.cybersoft.edu.vn";
+export const TOKEN_CYBERSOFT =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCBTw6FuZyAxNSIsIkhldEhhblN0cmluZyI6IjExLzA5LzIwMjUiLCJIZXRIYW5UaW1lIjoiMTc1NzU0ODgwMDAwMCIsIm5iZiI6MTczMzg1MDAwMCwiZXhwIjoxNzU3Njk2NDAwfQ.5vww18nCtO2mffvALHhzwa38Gyr82SqzU0hb0DLMGx0";
 
-    return JSON.parse(jsonPayload);
-  } catch (e) {
-    console.error("Invalid JWT token:", e);
-    return null;
-  }
-}
-
-// Hàm kiểm tra token có hết hạn không
-function isTokenExpired(token) {
-  const decoded = decodeJWT(token);
-
-  if (!decoded || !decoded.exp) {
-    return true; // Token không hợp lệ hoặc không có thời gian hết hạn
-  }
-
-  // exp trong JWT là timestamp tính bằng giây
-  const expirationDate = new Date(decoded.exp * 1000);
-  const currentDate = new Date();
-
-  return expirationDate < currentDate;
-}
+export const http = axios.create({
+  baseURL: DOMAIN,
+  timeout: 3000,
+});
 
 http.interceptors.request.use((req) => {
   req.headers = {
     ...req.headers,
     TokenCybersoft: TOKEN_CYBERSOFT,
-    Authorization: localStorage.getItem(TOKEN),
+    Authorization: `Bearer ${localStorage.getItem(TOKEN)}`,
   };
   return req;
 });
 
-http.interceptors.response.use(
+http.interceptors.response.use( 
   (res) => res,
   async (err) => {
-    const rawToken = localStorage.getItem(TOKEN);
-    if (rawToken) {
+    const jwtDecodeToken = decodeJWT(localStorage.getItem(TOKEN));
+    if (jwtDecodeToken) {
       //khi decode token thành công thì mối check token hết hạn hay chưa để refresh token
-      const isExpired = isTokenExpired(rawToken);
+      const isExpired = isTokenExpired(localStorage.getItem(TOKEN));
       //nếu trước khi gửi token về server mà token hết hạn thì gọi api refresh token
       if (isExpired) {
         try {
@@ -97,7 +60,8 @@ http.interceptors.response.use(
             url: "https://apistore.cybersoft.edu.vn/api/Users/RefeshToken",
             method: "POST",
             headers: {
-              Authorization: rawToken,
+              Authorization: localStorage.getItem(TOKEN),
+              TokenCybersoft: TOKEN_CYBERSOFT,
             },
 
             //nếu thành công thì lưu lại token mới
@@ -154,3 +118,41 @@ http.interceptors.response.use(
     return Promise.reject(err);
   }
 );
+
+
+function decodeJWT(token) {
+  try {
+    // Tách phần payload từ token (JWT có 3 phần: header.payload.signature)
+    // if (!token) return null;
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error("Invalid JWT token:", e);
+    return null;
+  }
+}
+
+// Hàm kiểm tra token có hết hạn không
+function isTokenExpired(token) {
+  const decoded = decodeJWT(token);
+
+  if (!decoded || !decoded.exp) {
+    return true; // Token không hợp lệ hoặc không có thời gian hết hạn
+  }
+
+  // exp trong JWT là timestamp tính bằng giây
+  const expirationDate = new Date(decoded.exp * 1000);
+  const currentDate = new Date();
+
+  return expirationDate < currentDate;
+}

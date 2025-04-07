@@ -44,15 +44,16 @@ const userReducer = createSlice({
       state.profile = action.payload;
     },
     logoutAction: (state) => {
-      state.userLogin = null;
-      localStorage.removeItem(USER_LOGIN);
-      localStorage.removeItem(TOKEN);
-    },
+
+      state.userLogin = null
+      localStorage.removeItem(USER_LOGIN)
+      localStorage.removeItem(TOKEN)
+    }
   },
 });
 
-export const { handleChangeInputAction, setProfileAction, setUserLoginAction,logoutAction } =
-  userReducer.actions;
+export const {handleChangeInputAction, setProfileAction,setUserLoginAction, logoutAction} = userReducer.actions
+
 
 export default userReducer.reducer;
 
@@ -98,8 +99,12 @@ export const loginAction = (userLoginModel) => {
 
 export const getProfileAction = () => async (dispatch) => {
   try {
-    const res = await http.post(getAPIUserProfileData);
-    dispatch(setProfileAction(res.data.content));
+
+    const res = await http.post(
+      "https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01"
+    );
+    dispatch(setProfileAction(res.data.content))
+
   } catch (err) {
     console.log(err);
     navigateHistory.push("/login");
