@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { getMovieDetailActionThunk } from "../redux/reducer/movieReducer";
+import { getMovieDetailActionThunk } from "../../redux/reducer/movieReducer";
 
-const Detail = () => {
+const DetailMovie = () => {
   const param = useParams();
   const { movieDetails } = useSelector((state) => state.movieReducer);
   const dispatch = useDispatch();
@@ -57,4 +57,4 @@ const Detail = () => {
   );
 };
 
-export default Detail;
+export default DetailMovie;

@@ -12,7 +12,10 @@ import Register from "./pages/Register";
 import UserProfile from "./pages/UserProfile";
 import { navigateHistory } from "./utils/setting";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Detail from "./pages/Detail";
+import Detail from "./component/DetailPage/DetailMovie";
+import DetailPage from "./pages/DetailPage";
+import MovieList from "./component/HomePage/MovieList";
+import DetailMovie from "./component/DetailPage/DetailMovie";
 
 const queryClient = new QueryClient();
 
@@ -27,8 +30,9 @@ const App = () => {
               <Route path="/login" element={<Login />}></Route>
               <Route path="/register" element={<Register />}></Route>
               <Route path="/profile" element={<UserProfile />}></Route>
-              <Route path="/detail" >
-                <Route path=":maPhim" element={<Detail />}></Route>
+              <Route path="/detail" element={<DetailPage />}>
+                <Route index element={<MovieList />} />
+                <Route path=":maPhim" element={<DetailMovie />} />
               </Route>
             </Routes>
           </QueryClientProvider>
