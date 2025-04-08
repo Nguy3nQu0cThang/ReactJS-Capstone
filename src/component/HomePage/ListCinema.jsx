@@ -11,6 +11,7 @@ const ListCinema = () => {
   })
   
   if (query.isLoading) {
+    console.log(query);
     return <div>Loading...</div>
   } else if (query.error) {
     return <div>Lỗi {query.error.message}</div>
