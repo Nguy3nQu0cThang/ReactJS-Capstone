@@ -6,6 +6,7 @@ import { http } from "../utils/setting";
 const Register = () => {
   const { userRegister } = useSelector((state) => state.userReducer);
   console.log("userRegister", userRegister);
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleChangeInput = (e) => {
@@ -15,23 +16,25 @@ const Register = () => {
     dispatch(action);
     console.log("action", action);
   };
-  const getAPIUserRegister = async (userRegister) => {
-    try {
-      const res = await http.post(
-        "https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/DangKy",
-        userRegister
-      );
-      console.log("API Res", res)
-      return res.data.content;
-    } catch (err) {
-      console.log("Error Banner", err);
-    }
-  };
+  // const getAPIUserRegister = async (userRegister) => {
+  //   try {
+  //     const res = await http.post(
+  //       "https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/DangKy",
+  //       userRegister
+  //     );
+  //     console.log("API Res", res)
+  //     return res.data.content;
+  //   } catch (err) {
+  //     console.log("Error Banner", err);
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("userRegister:", userRegister);
     try {
-      const res = await getAPIUserRegister(userRegister);
+      const res = await http.post(
+        "https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/DangKy",
+        userRegister)
       console.log(res)
       alert("đăng ký thành công");
       navigate("/login");

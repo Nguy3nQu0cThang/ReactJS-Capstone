@@ -1,41 +1,22 @@
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
-import { loginAction } from "../redux/reducer/userReducer"; 
+import { loginAction } from "../redux/reducer/userReducer";
 import { useNavigate } from "react-router-dom";
-import { http } from "../utils/setting";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const userLoginAPI = async (taiKhoan, matKhau) => {
-    try {
-      const res = await http.post(
-        "https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/DangNhap",
-        {taiKhoan, matKhau}
-      );
-      return res.data.content
-    } catch (err) {
-      console.log("Error Banner", err)
-    }
-  }
-
   const frmLogin = useFormik({
     initialValues: {
-      taiKhoan: "",  
+      taiKhoan: "",
       matKhau: "",
     },
     onSubmit: async (values) => {
-      console.log("From values:", values)
-      try {
-        
-        const userData = await userLoginAPI(values.taiKhoan, values.matKhau);
-        console.log("User Data", userData)
-        dispatch(loginAction(userData)); 
-        navigate("/profile"); 
-      } catch (error) {
-        console.log("Login failed", error);
-      }
+
+      console.log("From values:", values);
+      dispatch(loginAction(values));
+      navigate("/");
+
     },
   });
 

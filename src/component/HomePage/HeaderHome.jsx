@@ -1,6 +1,16 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
+import { logoutAction } from "../../redux/reducer/userReducer";
 const HeaderHome = () => {
+  const dispatch = useDispatch();
+  const { userLogin } = useSelector((state) => state.userReducer);
+
+
+  const handleLogout = () => {
+    dispatch(logoutAction());
+  };
+
   return (
     <div className="d-flex align-items-center justify-content-around">
       <div>
@@ -46,12 +56,23 @@ const HeaderHome = () => {
         </div>
       </nav>
       <div className="">
-        <Link to="/login" className="btn btn-primary me-2">
-          Đăng Nhập
-        </Link>
-        <Link to="/register" className="btn btn-dark">
-          Đăng Ký
-        </Link>
+        {userLogin ? (
+          <div className="d-flex align-items-center gap-2">
+            <span className="me-2">👤 {userLogin.hoTen}</span>
+            <button onClick={handleLogout} className="btn btn-danger">
+              Đăng xuất
+            </button>
+          </div>
+        ) : (
+          <>
+            <Link to="/login" className="btn btn-primary me-2">
+              Đăng Nhập
+            </Link>
+            <Link to="/register" className="btn btn-dark">
+              Đăng Ký
+            </Link>{" "}
+          </>
+        )}
       </div>
     </div>
   );
