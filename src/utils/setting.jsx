@@ -46,7 +46,7 @@ http.interceptors.request.use((req) => {
   return req;
 });
 
-http.interceptors.response.use( 
+http.interceptors.response.use(
   (res) => res,
   async (err) => {
     const jwtDecodeToken = decodeJWT(localStorage.getItem(TOKEN));
@@ -118,7 +118,6 @@ http.interceptors.response.use(
     return Promise.reject(err);
   }
 );
-
 
 function decodeJWT(token) {
   try {
