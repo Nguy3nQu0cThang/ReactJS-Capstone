@@ -18,9 +18,26 @@ const ListCinema = () => {
   }
   return (
     <div>
-
+      <div className="container py-4">
+        <h3 className="text-xl font-semibold mb-4">Danh sách hệ thống rạp</h3>
+        <ul className="list-disc pl-6 space-y-2">
+          {query.data.map((value, index) => (
+            <li key={index}>
+              <strong>{value.tenHeThongRap}</strong>
+              <img
+                src={value.logo}
+                alt={value.tenHeThongRap}
+                style={{
+                  width: "100px",
+                  height: "100px",
+                }}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  )
+  );
 }
 
 export default ListCinema

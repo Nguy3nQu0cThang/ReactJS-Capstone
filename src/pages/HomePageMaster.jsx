@@ -10,7 +10,6 @@ const HomePageMaster = () => {
     <div className="container mx-auto">
       <HeaderHome />
       <Banner />
-      <SearchBar />
       <MovieList />
       <div className="flex gap-4 ">
         <div className="w-[15%]">

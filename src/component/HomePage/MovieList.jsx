@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getMovieListAPI } from "../../API/apiQuanLyPhim";
+import SearchBar from "./SearchBar";
 // import { Card } from "antd";
 const MovieList = () => {
   // const movies = ['Phim 1', 'Phim 2', 'Phim 3']
@@ -36,6 +37,8 @@ const MovieList = () => {
     // </div>
 
     <div className="container py-4">
+      <SearchBar />
+
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         {query.data.map((item, index) => {
           return (
@@ -45,7 +48,7 @@ const MovieList = () => {
                   src={item.hinhAnh}
                   alt={item.tenPhim}
                   className="card-img-top img-fluid"
-                  style={{ height: "300px", objectFit: "cover" }}
+                  style={{ height: "300px", objectFit: "fill" }}
                 />
                 <div className="card-body">
                   <h5 className="card-title">{item.tenPhim}</h5>
