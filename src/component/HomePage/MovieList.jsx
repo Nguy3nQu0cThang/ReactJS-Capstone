@@ -8,7 +8,7 @@ const MovieList = () => {
     queryKey: [`MovieList`],
     queryFn: getMovieListAPI,
     staleTime: 1 * 1000 * 60,
-    cacheTime: 1000 * 10,
+    gcTime: 1000 * 10,
   });
   if (query.isLoading) {
     return <div>Loading....</div>;
