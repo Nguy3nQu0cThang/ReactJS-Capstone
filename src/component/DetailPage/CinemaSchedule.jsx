@@ -1,8 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { getListMovieOfCinemaAPI } from "../../API/apiQuanLyRap";
+import { useNavigate } from "react-router-dom";
+
 
 const CinemaSchedule = ({ maCumRap }) => {
+  const navigate = useNavigate();
+
+  const goToMovieDetail = (maPhim) => {
+    navigate(`/detail/${maPhim}`);
+  }
+
   const [selectedDates, setSelectedDates] = useState({});
 
   const query = useQuery({
@@ -67,7 +75,8 @@ const CinemaSchedule = ({ maCumRap }) => {
               <img
                 src={phim.hinhAnh}
                 alt={phim.tenPhim}
-                className="w-28 h-40 object-cover rounded"
+                className="w-28 h-40 object-cover rounded cursor-pointer"
+                onClick={() => goToMovieDetail(phim.maPhim)}
               />
             </div>
 
@@ -79,7 +88,12 @@ const CinemaSchedule = ({ maCumRap }) => {
                     HOT
                   </span>
                 )}
-                <h4 className="text-lg font-semibold">{phim.tenPhim}</h4>
+                <h4
+                  className="text-lg font-semibold cursor-pointer"
+                  onClick={() => goToMovieDetail(phim.maPhim)}
+                >
+                  {phim.tenPhim}
+                </h4>
                 {(phim.dangChieu || phim.sapChieu) && (
                   <span className="bg-black bg-opacity-50 text-white text-sm px-2 py-0.5 rounded italic">
                     {phim.dangChieu ? "Đang chiếu" : "Sắp chiếu"}
