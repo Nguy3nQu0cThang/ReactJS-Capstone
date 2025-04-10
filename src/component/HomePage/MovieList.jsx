@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getMovieListAPI } from "../../API/apiQuanLyPhim";
+import SearchBar from "./SearchBar";
 import { Link } from "react-router-dom";
 // import { Card } from "antd";
 const MovieList = () => {
@@ -9,7 +10,7 @@ const MovieList = () => {
     queryKey: [`MovieList`],
     queryFn: getMovieListAPI,
     staleTime: 1 * 1000 * 60,
-    cacheTime: 1000 * 10,
+    gcTime: 1000 * 10,
   });
   if (query.isLoading) {
     return <div>Loading....</div>;
@@ -87,7 +88,7 @@ const MovieList = () => {
                             📄 Chi tiết
                           </Link>
                           <Link
-                            to={`...`}
+                            to="/booking"
                             className="btn btn-sm btn-success"
                           >
                             🎟️ Đặt vé

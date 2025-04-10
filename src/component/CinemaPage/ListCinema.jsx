@@ -21,13 +21,13 @@ const ListCinema = ({ onSelectCinema }) => {
       {query.data.map((cinema) => (
         <button
           key={cinema.maHeThongRap}
-          className="w-full px-4 py-4 hover:bg-gray-100 border-b text-left"
+          className="w-full px-4 py-4 hover:bg-gray-100 border rounded mb-2 text-left"
           onClick={() => onSelectCinema(cinema.maHeThongRap)}
         >
           <img
             src={cinema.logo}
             alt={cinema.tenHeThongRap}
-            className="h-12 object-contain mx-auto"
+            className="h-10 object-contain mx-auto"
           />
         </button>
       ))}

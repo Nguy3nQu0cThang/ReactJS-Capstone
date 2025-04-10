@@ -15,6 +15,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import DetailPage from "./pages/DetailPage";
 import MovieList from "./component/HomePage/MovieList";
 import DetailMovie from "./component/DetailPage/DetailMovie";
+import CinemaPage from "./pages/CinemaPage";
+import BookingPage from "./pages/BookingPage";
 
 const queryClient = new QueryClient();
 
@@ -25,13 +27,15 @@ const App = () => {
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <Routes>
-              <Route path="" element={<HomePageMaster />}></Route>
-              <Route path="/login" element={<Login />}></Route>
-              <Route path="/register" element={<Register />}></Route>
-              <Route path="/profile" element={<UserProfile />}></Route>
-              <Route path="/detail" element={<DetailPage />}>
+              <Route path="/" element={<HomePageMaster />}>
                 <Route index element={<MovieList />} />
-                <Route path=":maPhim" element={<DetailMovie />} />
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
+                <Route path="profile" element={<UserProfile />} />
+                <Route path="detail" element={<DetailPage />}/>
+                <Route path="detail/:maPhim" element={<DetailMovie />} />
+                <Route path="cinema" element={<CinemaPage />} />
+                <Route path="booking/:maLichChieu" element={<BookingPage />} />
               </Route>
             </Routes>
           </QueryClientProvider>
