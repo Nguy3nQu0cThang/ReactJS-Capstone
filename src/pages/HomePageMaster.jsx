@@ -1,14 +1,20 @@
 import React from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import HeaderHome from "../component/HomePage/HeaderHome";
 import Banner from "../component/HomePage/Banner";
-import MovieList from "../component/HomePage/MovieList";
 
 const HomePageMaster = () => {
+  const location = useLocation();
+
+  const isHome = location.pathname === "/" || location.pathname === "/cinema"
+
   return (
     <div className="container mx-auto">
       <HeaderHome />
-      <Banner />
-      <MovieList />
+      {isHome && <Banner />}
+      <div className="container mx-auto px-4">
+        <Outlet />
+      </div>
     </div>
   );
 };

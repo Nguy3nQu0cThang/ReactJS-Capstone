@@ -16,5 +16,6 @@ export const getListMovieOfCinemaAPI = async () => {
     return res.data.content
   } catch (err) {
     console.log("Error List Movie of Cinema", err)
+    return []
   }
 }

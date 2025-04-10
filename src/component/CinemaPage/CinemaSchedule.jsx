@@ -26,16 +26,14 @@ const CinemaSchedule = ({ maCumRap }) => {
     return <div>Lỗi {query.error.message}</div>;
   }
 
+  if (!Array.isArray(query.data)) {
+    return <div>Không có dữ liệu rạp</div>;
+  }
+
   // Tìm cụm rạp được chọn
-  let selectedBranch = null;
-  query.data.forEach((cinema) => {
-    const branch = cinema.lstCumRap.find(
-      (branch) => branch.maCumRap === maCumRap
-    );
-    if (branch) {
-      selectedBranch = branch;
-    }
-  });
+  const selectedBranch = query.data
+    .flatMap((cinema) => cinema.lstCumRap || [])
+    .find((branch) => branch.maCumRap === maCumRap);
 
   if (!selectedBranch) return <div>Không tìm thấy cụm rạp</div>;
 
@@ -84,7 +82,7 @@ const CinemaSchedule = ({ maCumRap }) => {
             <div className="flex-1">
               <div className="flex items-center gap-2 flex-wrap">
                 {phim.hot && (
-                  <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                  <span className="bg-red-600 text-white text-lg font-bold px-2 py-1 rounded-lg">
                     HOT
                   </span>
                 )}
@@ -123,7 +121,8 @@ const CinemaSchedule = ({ maCumRap }) => {
                 {showtimes.map((lich, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 text-lg bg-blue-100 text-blue-700 rounded"
+                    className="px-3 py-1 text-lg bg-blue-100 text-blue-700 rounded cursor-pointer"
+                    onClick={() => navigate(`/booking/${lich.maLichChieu}`)}
                   >
                     {new Date(lich.ngayChieuGioChieu).toLocaleTimeString([], {
                       hour: "2-digit",
