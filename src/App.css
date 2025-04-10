@@ -1,0 +1,38 @@
+.movie-card {
+  overflow: hidden;
+  position: relative;
+}
+
+.movie-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 1;
+}
+
+.movie-card:hover .movie-overlay {
+  opacity: 1;
+}
+.movie-section {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  background-color: #dda815;
+}
+.carousel-control-custom {
+  width: 50px;
+  height: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.carousel-control-custom:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
