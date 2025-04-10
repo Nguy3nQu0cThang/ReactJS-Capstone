@@ -12,66 +12,69 @@ const HeaderHome = () => {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-around">
+    <div className="flex items-center justify-around p-4 bg-white shadow-md">
       <div>
-        <a className="navbar-brand" href="#">
+        <a
+          className="text-xl font-bold text-black text-decoration-none"
+          href="#"
+        >
           Navbar
         </a>
       </div>
-      <nav className="navbar navbar-expand-lg navbar-light ">
-        <div className="container-fluid ">
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon" />
-          </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mb-lg-0">
-              <li className="nav-item ">
-                <a className="nav-link mx-5" aria-current="page" href="#">
-                  Trang chủ
-                </a>
-              </li>
-              <li className="nav-item mx-5">
-                <a className="nav-link" href="#">
-                  Liên hệ
-                </a>
-              </li>
-              <li className="nav-item mx-5">
-                <a className="nav-link" href="#">
-                  Tin tức
-                </a>
-              </li>
-              <li className="nav-item mx-5">
-                <a className="nav-link">Ứng dụng</a>
-              </li>
-            </ul>
-          </div>
-        </div>
+
+      <nav className="hidden lg:flex space-x-10">
+        <a
+          className="text-black hover:text-blue-600 text-decoration-none"
+          href="#"
+        >
+          Trang chủ
+        </a>
+        <a
+          className="text-black hover:text-blue-600 text-decoration-none"
+          href="#"
+        >
+          Liên hệ
+        </a>
+        <a
+          className="text-black hover:text-blue-600 text-decoration-none"
+          href="#"
+        >
+          Tin tức
+        </a>
+        <a
+          className="text-black hover:text-blue-600 text-decoration-none"
+          href="#"
+        >
+          Ứng dụng
+        </a>
       </nav>
-      <div className="">
+
+      <div>
         {userLogin ? (
-          <div className="d-flex align-items-center gap-2">
-            <span className="me-2">👤 {userLogin.hoTen}</span>
-            <button onClick={handleLogout} className="btn btn-danger">
+          <div className="flex items-center space-x-4">
+            <span className="text-black">👤 {userLogin.hoTen}</span>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+            >
               Đăng xuất
             </button>
           </div>
         ) : (
-          <>
-            <Link to="/login" className="btn btn-primary me-2">
+          <div className="flex space-x-4">
+            <Link
+              to="/login"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-decoration-none"
+            >
               Đăng Nhập
             </Link>
-            <Link to="/register" className="btn btn-dark">
+            <Link
+              to="/register"
+              className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900 text-decoration-none"
+            >
               Đăng Ký
-            </Link>{" "}
-          </>
+            </Link>
+          </div>
         )}
       </div>
     </div>

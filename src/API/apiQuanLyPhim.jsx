@@ -1,11 +1,8 @@
-import axios from "axios";
 import { http } from "../utils/setting";
-
-const apiBase = "https://movienew.cybersoft.edu.vn/api/QuanLyPhim";
 
 export const getAPIQuanLyPhimBanner = async () => {
   try {
-    const res = await axios.get(`${apiBase}/LayDanhSachBanner`);
+    const res = await http.get("/api/QuanLyPhim/LayDanhSachBanner");
     return res.data.content;
   } catch (err) {
     console.log("Error Banner", err);
@@ -13,10 +10,8 @@ export const getAPIQuanLyPhimBanner = async () => {
 };
 
 export const getMovieListAPI = async () => {
-
-
   try {
-    const res = await http.get(`${apiBase}/LayDanhSachPhim?maNhom=GP01`);
+    const res = await http.get("/api/QuanLyPhim/LayDanhSachPhim?maNhom=GP01");
     return res.data.content;
   } catch (err) {
     console.log("Error Movie List", err);

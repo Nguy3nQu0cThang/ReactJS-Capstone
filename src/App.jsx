@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import UserProfile from "./pages/UserProfile";
 import { navigateHistory } from "./utils/setting";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Detail from "./component/DetailPage/DetailMovie";
 import DetailPage from "./pages/DetailPage";
 import MovieList from "./component/HomePage/MovieList";
 import DetailMovie from "./component/DetailPage/DetailMovie";
