@@ -88,7 +88,7 @@ const MovieList = () => {
                             📄 Chi tiết
                           </Link>
                           <Link
-                            to={`...`}
+                            to="/booking"
                             className="btn btn-sm btn-success"
                           >
                             🎟️ Đặt vé

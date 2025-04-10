@@ -16,7 +16,7 @@ const DetailMovie = () => {
     getMovieByMaPhim();
   }, [param.maPhim]);
   return (
-    <div className="container my-5">
+    <div className="container my-5 ">
       <div className="row align-items-start">
         <div className="col-md-4 mb-4">
           <img

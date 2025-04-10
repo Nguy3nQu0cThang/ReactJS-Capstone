@@ -1,36 +1,37 @@
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-import ListCinema from "../component/DetailPage/ListCinema";
-import CinemaSchedule from "../component/DetailPage/CinemaSchedule";
-import CinemaBranches from "../component/DetailPage/CinemaBranches";
+import CurrentMovie from "../component/DetailPage/CurrentMovie";
+import ComingMovie from "../component/DetailPage/ComingMovie";
+import MovieList from "../component/HomePage/MovieList";
 
 const DetailPage = () => {
-  const [selectCinema, setSelectCinema] = useState("BHDStar"); // Mặc định là BHD
-  const [selectBranch, setSelectBranch] = useState(null); // Cụm rạp được chọn
+  const [selectedTab, setSelectedTab] = useState("current");
 
   return (
-    <div className="container mx-auto py-4">
-      <h2 className="text-2xl font-bold mb-4">Trang phim</h2>
-      <Outlet />
-
-      <div className="flex gap-4">
-        <div className="w-[15%] h-[600px]">
-          <ListCinema onSelectCinema={setSelectCinema} />
-        </div>
-
-        <div className="w-[25%] h-[600px]">
-          <CinemaBranches
-            maHeThongRap={selectCinema}
-            onSelectBranch={setSelectBranch}
-          />
-        </div>
-
-        <div className="w-[60%] h-[600px]">
-          <CinemaSchedule maCumRap={selectBranch} />
-        </div>
+    <div className="mt-5">
+      <MovieList />
+      <div className="flex gap-4 mb-4 justify-center">
+        <button
+          className={`px-4 py-2 ${
+            selectedTab === "current" ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+          onClick={() => setSelectedTab("current")}
+        >
+          Đang chiếu
+        </button>
+        <button
+          className={`px-4 py-2 ${
+            selectedTab === "coming" ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+          onClick={() => setSelectedTab("coming")}
+        >
+          Sắp chiếu
+        </button>
       </div>
+      {selectedTab === "current" && <CurrentMovie />}
+      {selectedTab === "coming" && <ComingMovie />}
     </div>
   );
 };
 
 export default DetailPage;
+
