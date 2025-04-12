@@ -1,4 +1,4 @@
-import { http } from "../utils/setting";
+import { http, TOKEN_CYBERSOFT } from "../utils/setting";
 
 export const getAPIQuanLyPhimBanner = async () => {
   try {
@@ -17,4 +17,16 @@ export const getMovieListAPI = async () => {
     console.log("Error Movie List", err);
   }
 
+};
+
+export const deleteMovieAPI = async (maPhim) => {
+  const res = await http.delete(
+    `https://movienew.cybersoft.edu.vn/api/QuanLyPhim/XoaPhim?MaPhim=${maPhim}`,
+    {
+      headers: {
+        TokenCyberSoft: TOKEN_CYBERSOFT
+      },
+    }
+  );
+  return res.data.content;
 };

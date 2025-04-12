@@ -1,15 +1,33 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getMovieListAPI } from "../../API/apiQuanLyPhim";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteMovieAPI, getMovieListAPI } from "../../API/apiQuanLyPhim";
 import SearchBar from "../HomePage/SearchBar";
 import { Link } from "react-router-dom";
 
 const MovieManagement = () => {
+  const queryClient = useQueryClient();
   const query = useQuery({
     queryKey: ["MovieList"],
     queryFn: getMovieListAPI,
     staleTime: 1 * 60 * 1000,
   });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteMovieAPI,
+    onSuccess: () => {
+      alert("Đã xoá phim!");
+      queryClient.invalidateQueries(["MovieList"]);
+    },
+    onError: () => {
+      alert("Xoá phim thất bại.");
+    },
+  });
+
+  const handleDelete = (maPhim) => {
+    if (window.confirm("Bạn có chắc muốn xoá phim này không?")) {
+      deleteMutation.mutate(maPhim);
+    }
+  };
 
   if (query.isLoading) return <div>Loading...</div>;
   if (query.error) return <div>Lỗi: {query.error.message}</div>;
@@ -57,7 +75,12 @@ const MovieManagement = () => {
                   >
                     Edit
                   </Link>
-                  {/* You could add delete button here too */}
+                  <button
+                    onClick={() => handleDelete(movie.maPhim)}
+                    className="btn btn-danger btn-sm"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
