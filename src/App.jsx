@@ -17,6 +17,8 @@ import MovieList from "./component/HomePage/MovieList";
 import DetailMovie from "./component/DetailPage/DetailMovie";
 import CinemaPage from "./pages/CinemaPage";
 import BookingPage from "./pages/BookingPage";
+import ManagerPage from "./pages/ManagerPage";
+import AddMovie from "./pages/AddMovie";
 
 const queryClient = new QueryClient();
 
@@ -32,10 +34,14 @@ const App = () => {
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
                 <Route path="profile" element={<UserProfile />} />
-                <Route path="detail" element={<DetailPage />}/>
+                <Route path="detail" element={<DetailPage />} />
                 <Route path="detail/:maPhim" element={<DetailMovie />} />
                 <Route path="cinema" element={<CinemaPage />} />
                 <Route path="booking/:maLichChieu" element={<BookingPage />} />
+              </Route>
+              <Route path="admin" element={<ManagerPage />}>
+                <Route path="login" element={<Login />} />
+                <Route path="add" element={<AddMovie/>}/>
               </Route>
             </Routes>
           </QueryClientProvider>
