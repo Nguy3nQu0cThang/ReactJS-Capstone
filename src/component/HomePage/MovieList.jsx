@@ -2,16 +2,35 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getMovieListAPI } from "../../API/apiQuanLyPhim";
 import SearchBar from "./SearchBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { getLichChieuTheoPhimAPI } from "../../API/apiBooking";
 // import { Card } from "antd";
 const MovieList = () => {
   // const movies = ['Phim 1', 'Phim 2', 'Phim 3']
+  const navigate = useNavigate();
   const query = useQuery({
     queryKey: [`MovieList`],
     queryFn: getMovieListAPI,
     staleTime: 1 * 1000 * 60,
     gcTime: 1000 * 10,
   });
+
+  const handleBookingClick = async (maPhim) => {
+    try {
+      const data = await getLichChieuTheoPhimAPI(maPhim);
+      const firstLichChieu =
+        data.heThongRapChieu?.[0]?.cumRapChieu?.[0]?.lichChieuPhim?.[0];
+
+      if (firstLichChieu?.maLichChieu) {
+        navigate(`/booking/${firstLichChieu.maLichChieu}`);
+      } else {
+        alert("Phim này chưa có lịch chiếu.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy lịch chiếu:", error);
+      alert("Không thể lấy lịch chiếu.");
+    }
+  };
   if (query.isLoading) {
     return <div>Loading....</div>;
   } else if (query.error) {
@@ -72,7 +91,6 @@ const MovieList = () => {
                             Đánh giá: {item.danhGia}
                           </p>
                         </div>
-
                         {/* Hover buttons */}
                         <div className="movie-overlay d-flex justify-content-center align-items-center flex-column">
                           <button
@@ -87,12 +105,12 @@ const MovieList = () => {
                           >
                             📄 Chi tiết
                           </Link>
-                          <Link
-                            to="/booking"
+                          <button
                             className="btn btn-sm btn-success"
+                            onClick={() => handleBookingClick(item.maPhim)}
                           >
                             🎟️ Đặt vé
-                          </Link>
+                          </button>
                         </div>
                       </div>
                     </div>

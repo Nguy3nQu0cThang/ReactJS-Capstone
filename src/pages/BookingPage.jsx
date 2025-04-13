@@ -9,7 +9,7 @@ import TotalCheckout from "../component/BookingPage/TotalCheckout";
 const BookingPage = () => {
   const { maLichChieu } = useParams();
   const [selectSeats, setSelectSeats] = useState([]);
-
+  // const navigate = useNavigate();
   const query = useQuery({
     queryKey: ["danhSachGhe", maLichChieu],
     queryFn: () => bookingAPI(maLichChieu),
@@ -18,9 +18,18 @@ const BookingPage = () => {
     enabled: !!maLichChieu,
   });
 
+  // const user = JSON.parse(localStorage.getItem("USER_LOGIN"));
+  // if (!user) {
+  //   alert("Vui lòng đăng nhập để đặt vé!");
+  //   navigate("/login");
+  //   return;
+  // }
+
   if (query.isLoading) {
-    console.log(query);
+    console.log(query.data);
     return <div>Loading...</div>;
+  } else if (!query.data || !query.data.danhSachGhe) {
+    return <div>Không tìm thấy dữ liệu ghế cho lịch chiếu này.</div>;
   } else if (query.error) {
     return <div>Lỗi {query.error.message}</div>;
   }
