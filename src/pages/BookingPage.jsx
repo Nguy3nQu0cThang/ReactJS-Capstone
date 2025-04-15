@@ -125,7 +125,7 @@ const BookingPage = () => {
       <h2 className="text-2xl font-bold mb-4">Đặt vé xem phim</h2>
 
       {/* Debug state để theo dõi */}
-      <div className="text-sm bg-gray-100 p-2 rounded mb-4">
+      <div className="text-lg bg-gray-100 p-2 rounded mb-4">
         <div>🎬 Phim: {selectedMovie?.tenPhim || "Chưa chọn"}</div>
         <div>🏢 Rạp: {selectedBranch?.tenCumRap || "Chưa chọn"}</div>
         <div>
@@ -141,8 +141,7 @@ const BookingPage = () => {
             : "Chưa chọn"}
         </div>
       </div>
-
-      {/* Nút xác nhận đặt vé */}
+      {/* Nút reset */}
       <div className="mt-6 text-center">
         <button
           onClick={handleReset}
@@ -152,6 +151,7 @@ const BookingPage = () => {
         >
           Đặt lại
         </button>
+        {/* Nút xác nhận đặt vé */}
         <button
           onClick={handleBooking}
           disabled={!selectedShowtime}

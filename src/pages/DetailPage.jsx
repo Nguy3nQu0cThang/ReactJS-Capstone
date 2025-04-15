@@ -11,7 +11,7 @@ const DetailPage = () => {
       <MovieList />
       <div className="flex gap-4 mb-4 justify-center">
         <button
-          className={`px-4 py-2 ${
+          className={`px-4 py-2 border rounded ${
             selectedTab === "current" ? "bg-blue-500 text-white" : "bg-gray-200"
           }`}
           onClick={() => setSelectedTab("current")}
@@ -19,7 +19,7 @@ const DetailPage = () => {
           Đang chiếu
         </button>
         <button
-          className={`px-4 py-2 ${
+          className={`px-4 py-2 border rounded ${
             selectedTab === "coming" ? "bg-blue-500 text-white" : "bg-gray-200"
           }`}
           onClick={() => setSelectedTab("coming")}
