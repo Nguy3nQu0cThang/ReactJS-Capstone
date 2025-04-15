@@ -3,19 +3,18 @@ import React, { useState } from "react";
 import { getListMovieOfCinemaAPI } from "../../API/apiQuanLyRap";
 import { useNavigate } from "react-router-dom";
 
-
 const CinemaSchedule = ({ maCumRap }) => {
   const navigate = useNavigate();
 
   const goToMovieDetail = (maPhim) => {
     navigate(`/detail/${maPhim}`);
-  }
+  };
 
   const [selectedDates, setSelectedDates] = useState({});
 
   const query = useQuery({
-    queryKey: [`ListMovieOfCinema`],
-    queryFn: getListMovieOfCinemaAPI,
+    queryKey: ["ListMovieOfCinema", maCumRap], 
+    queryFn: () => getListMovieOfCinemaAPI(),
     staleTime: 1 * 1000 * 60,
     gcTime: 1000 * 10,
   });
@@ -35,7 +34,9 @@ const CinemaSchedule = ({ maCumRap }) => {
     .flatMap((cinema) => cinema.lstCumRap || [])
     .find((branch) => branch.maCumRap === maCumRap);
 
-  if (!selectedBranch) return <div>Không tìm thấy cụm rạp</div>;
+   if (!selectedBranch || !selectedBranch.danhSachPhim?.length) {
+     return <div>Không có phim cho cụm rạp này.</div>;
+   }
 
   return (
     <div className="h-full overflow-y-auto pr-4">
