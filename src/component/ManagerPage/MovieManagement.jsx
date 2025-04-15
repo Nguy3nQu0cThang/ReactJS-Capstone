@@ -70,7 +70,7 @@ const MovieManagement = () => {
                 <td>{movie.danhGia}</td>
                 <td>
                   <Link
-                    to={`/admin/movies/edit/${movie.maPhim}`}
+                    to={`/admin/edit/${movie.maPhim}`}
                     className="btn btn-warning btn-sm me-2"
                   >
                     Edit

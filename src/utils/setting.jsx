@@ -37,47 +37,60 @@ export const http = axios.create({
   timeout: 3000,
 });
 
-http.interceptors.request.use((req) => {
-  req.headers = {
-    ...req.headers,
+// http.interceptors.request.use((req) => {
+//   req.headers = {
+//     ...req.headers,
+//     TokenCybersoft: TOKEN_CYBERSOFT,
+//     Authorization: `Bearer ${localStorage.getItem(TOKEN)}`,
+//   };
+//   return req;
+// });
+
+http.interceptors.request.use((config) => {
+  const token = localStorage.getItem(TOKEN);
+  config.headers = {
+    ...config.headers,
     TokenCybersoft: TOKEN_CYBERSOFT,
-    Authorization: `Bearer ${localStorage.getItem(TOKEN)}`,
   };
-  return req;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 http.interceptors.response.use(
   (res) => res,
   async (err) => {
-    const jwtDecodeToken = decodeJWT(localStorage.getItem(TOKEN));
-    if (jwtDecodeToken) {
-      //khi decode token thành công thì mối check token hết hạn hay chưa để refresh token
-      const isExpired = isTokenExpired(localStorage.getItem(TOKEN));
-      //nếu trước khi gửi token về server mà token hết hạn thì gọi api refresh token
-      if (isExpired) {
-        try {
-          const response = await axios({
-            url: "https://apistore.cybersoft.edu.vn/api/Users/RefeshToken",
-            method: "POST",
-            headers: {
-              Authorization: localStorage.getItem(TOKEN),
-              TokenCybersoft: TOKEN_CYBERSOFT,
-            },
+    const token = localStorage.getItem(TOKEN);
 
-            //nếu thành công thì lưu lại token mới
-          });
-          localStorage.setItem(TOKEN, response.data.content.accessToken);
-          navigateHistory.push(window.location.pathname);
-        } catch (err) {
-          alert(err);
-          //nếu refresh thất bại thì yêu cầu login lại
-          navigateHistory.push("/login");
+    if (token) {
+      const jwtDecodeToken = decodeJWT(token);
+
+      if (jwtDecodeToken) {
+        const isExpired = isTokenExpired(token);
+
+        if (isExpired) {
+          try {
+            const response = await axios({
+              url: "https://apistore.cybersoft.edu.vn/api/Users/RefeshToken",
+              method: "POST",
+              headers: {
+                Authorization: token,
+                TokenCybersoft: TOKEN_CYBERSOFT,
+              },
+            });
+            localStorage.setItem(TOKEN, response.data.content.accessToken);
+            navigateHistory.push(window.location.pathname);
+          } catch (err) {
+            alert(err);
+            navigateHistory.push("/login");
+          }
         }
       }
     }
 
     // console.log(err.response.status, "lỗi");
-    switch (err?.response.status) {
+    switch (err?.response?.status) {
       case 400:
         {
           //chuyển hướng trang khi sai tham số

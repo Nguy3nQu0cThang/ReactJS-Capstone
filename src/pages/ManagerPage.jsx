@@ -7,7 +7,6 @@ const ManagerPage = () => {
   return (
     <div className='container mx-auto'>
         <HeaderHome/>
-        <MovieManagement/>
         <Outlet/>
     </div>
   )
