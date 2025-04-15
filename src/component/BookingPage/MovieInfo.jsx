@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BookingInfo = ({ info }) => {
+const MovieInfo = ({ info }) => {
   return (
     <div className="p-4 border rounded shadow-md">
       <img src={info.hinhAnh} alt={info.tenPhim} className="w-full mb-4" />
@@ -18,4 +18,4 @@ const BookingInfo = ({ info }) => {
   );
 };
 
-export default BookingInfo
+export default MovieInfo

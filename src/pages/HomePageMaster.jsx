@@ -6,7 +6,7 @@ import Banner from "../component/HomePage/Banner";
 const HomePageMaster = () => {
   const location = useLocation();
 
-  const isHome = location.pathname === "/" || location.pathname === "/cinema"
+  const isHome = location.pathname === "/" || location.pathname === "/cinema" || location.pathname === "/booking"
 
   return (
     <div className="container mx-auto">

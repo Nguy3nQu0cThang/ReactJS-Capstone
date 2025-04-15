@@ -6,8 +6,8 @@ import { getListMovieOfCinemaAPI } from '../../API/apiQuanLyRap'
 const CinemaBranches = ({ maHeThongRap, onSelectBranch }) => {
   const [selectBranch, setSelectBranch] = useState(null);
   const query = useQuery({
-    queryKey: [`ListMovieOfCinema`],
-    queryFn: getListMovieOfCinemaAPI,
+    queryKey: ["ListMovieOfCinema", maHeThongRap ],
+    queryFn: () => getListMovieOfCinemaAPI(),
     staleTime: 1000 * 60,
     gcTime: 1000 * 10,
   });
