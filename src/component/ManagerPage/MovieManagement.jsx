@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteMovieAPI, getMovieListAPI } from "../../API/apiQuanLyPhim";
 import SearchBar from "../HomePage/SearchBar";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const MovieManagement = () => {
   const queryClient = useQueryClient();
@@ -11,6 +12,7 @@ const MovieManagement = () => {
     queryFn: getMovieListAPI,
     staleTime: 1 * 60 * 1000,
   });
+  const { userLogin } = useSelector((state) => state.userReducer);
 
   const deleteMutation = useMutation({
     mutationFn: deleteMovieAPI,
@@ -35,7 +37,7 @@ const MovieManagement = () => {
     <div className="container mx-auto py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Quản lý phim</h2>
-        <Link to="/admin/add" className="btn btn-success">
+        <Link to={`/admin/${userLogin.taiKhoan}/add`} className="btn btn-success">
           + Add Movie
         </Link>
       </div>
@@ -70,7 +72,7 @@ const MovieManagement = () => {
                 <td>{movie.danhGia}</td>
                 <td>
                   <Link
-                    to={`/admin/edit/${movie.maPhim}`}
+                    to={`/admin/${userLogin.taiKhoan}/edit/${movie.maPhim}`}
                     className="btn btn-warning btn-sm me-2"
                   >
                     Edit

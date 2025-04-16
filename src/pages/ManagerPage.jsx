@@ -1,13 +1,13 @@
 import React from 'react'
-import HeaderHome from '../component/ManagerPage/HeaderHomeManager'
 import { Outlet } from 'react-router-dom'
 import MovieManagement from '../component/ManagerPage/MovieManagement'
+import HeaderHomeAdmin from '../component/ManagerPage/HeaderHomeManager'
 
 const ManagerPage = () => {
   return (
     <div className='container mx-auto'>
-        <HeaderHome/>
-        <Outlet/>
+        <HeaderHomeAdmin />
+        <Outlet />
     </div>
   )
 }

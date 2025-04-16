@@ -12,11 +12,15 @@ const Login = () => {
       matKhau: "",
     },
     onSubmit: async (values) => {
-
-      console.log("From values:", values);
-      dispatch(loginAction(values));
-      navigate("/");
-
+      const user = await dispatch(loginAction(values));
+      console.log(user)
+      if (user) {
+        if (user.maLoaiNguoiDung === "QuanTri") {
+          navigate(`/admin/${user.taiKhoan}`);
+        } else {
+          navigate("/");
+        }
+      }
     },
   });
 

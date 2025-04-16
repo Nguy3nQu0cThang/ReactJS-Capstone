@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfileAction } from "../redux/reducer/userReducer";
+import { useParams } from "react-router-dom";
 
 const UserProfile = () => {
+  const { taiKhoan } = useParams();
   const { profile } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
-  const getProfileAPI = async () => {
-     dispatch(getProfileAction());
-  };
+  
   useEffect(() => {
-    getProfileAPI();
-  }, []);
+    dispatch(getProfileAction(taiKhoan)); // truyền taiKhoan vào action (xem chỉnh sửa bên dưới)
+  }, [taiKhoan]);
 
   return (
     <div className="container mx-auto">

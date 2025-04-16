@@ -22,7 +22,7 @@ import AddMovie from "./pages/AddMovie";
 import BookingTicketPage from "./pages/BookingTicketPage";
 import EditMovie from "./pages/EditMovie";
 import MovieManagement from "./component/ManagerPage/MovieManagement";
-
+import ProtectedAdminRoute from "./component/ManagerPage/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -37,16 +37,25 @@ const App = () => {
                 <Route index element={<MovieList />} />
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
-                <Route path="profile" element={<UserProfile />} />
+                <Route path="profile/:taiKhoan" element={<UserProfile />} />
                 <Route path="detail" element={<DetailPage />} />
                 <Route path="detail/:maPhim" element={<DetailMovie />} />
                 <Route path="cinema" element={<CinemaPage />} />
                 <Route path="booking" element={<BookingPage />} />
-                <Route path="booking/:maLichChieu" element={<BookingTicketPage />} />
+                <Route
+                  path="booking/:maLichChieu"
+                  element={<BookingTicketPage />}
+                />
               </Route>
-              <Route path="admin" element={<ManagerPage />}>
+              <Route
+                path="admin/:taikhoan"
+                element={
+                  <ProtectedAdminRoute>
+                    <ManagerPage />
+                  </ProtectedAdminRoute>
+                }
+              >
                 <Route index element={<MovieManagement />} />
-                <Route path="login" element={<Login />} />
                 <Route path="add" element={<AddMovie />} />
                 <Route path="edit/:maPhim" element={<EditMovie />} />
               </Route>
