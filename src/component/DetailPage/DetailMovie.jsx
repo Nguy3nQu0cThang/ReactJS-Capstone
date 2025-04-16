@@ -19,11 +19,19 @@ const DetailMovie = () => {
     <div className="container my-5 ">
       <div className="row align-items-start">
         <div className="col-md-4 mb-4">
-          <img
-            src={movieDetails.hinhAnh}
-            alt={movieDetails.tenPhim}
-            className="img-fluid rounded shadow"
-          />
+          <div className="text-center">
+            <img
+              src={movieDetails.hinhAnh}
+              alt={movieDetails.tenPhim}
+              className="img-fluid rounded shadow mb-5 w-full"
+            />
+            <Link
+              to="/booking"
+              className="px-5 py-3 rounded text-white text-xl font-semibold bg-blue-600 hover:bg-blue-700 transition text-decoration-none"
+            >
+              Đặt vé
+            </Link>
+          </div>
         </div>
 
         <div className="col-md-8">

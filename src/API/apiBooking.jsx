@@ -10,7 +10,8 @@ export const bookingAPI = async (maLichChieu) => {
 
     return res.data.content;
   } catch (err) {
-    console.log("Error Banner", err?.response?.data || err.message || err);
+    console.log("Error Danh sách phòng vé", err?.response?.data || err.message || err);
+    throw err
   }
 };
 
@@ -19,7 +20,7 @@ export const bookingTicketAPI = async (payload) => {
     const res = await http.post("/api/QuanLyDatVe/DatVe", payload);
     return res.data.content;
   } catch (err) {
-    console.log("Error Banner", err);
+    console.log("Error Đặt vé", err);
     throw err;
   }
 };
