@@ -30,14 +30,9 @@ const HeaderHomeAdmin = () => {
         >
           Trang chủ
         </Link>
+        
         <Link
-          to="/admin"
-          className="text-black hover:text-blue-600 text-decoration-none"
-        >
-          Quản lý phim
-        </Link>
-        <Link
-          to="/admin/add"
+          to={`/admin/${userLogin.taiKhoan}/add`}
           className="text-black hover:text-blue-600 text-decoration-none"
         >
           Thêm phim
