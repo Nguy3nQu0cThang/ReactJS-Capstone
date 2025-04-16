@@ -6,7 +6,7 @@ import {
   TOKEN,
   USER_LOGIN,
 } from "../../utils/setting";
-import { getAPIUserProfileData } from "../../API/apiUser";
+// import { getAPIUserProfileData } from "../../API/apiUser";
 
 let getUserLoginDefault = () => {
   if (localStorage.getItem(USER_LOGIN)) {
@@ -74,6 +74,7 @@ export const loginAction = (userLoginModel) => {
     setCookie(TOKEN, token, 7);
 
     dispatch(setUserLoginAction(res.data.content));
+    return res.data.content;
   };
 };
 
@@ -97,14 +98,13 @@ export const loginAction = (userLoginModel) => {
 //   };
 // };
 
-export const getProfileAction = () => async (dispatch) => {
+export const getProfileAction = (taiKhoan) => async (dispatch) => {
   try {
-
     const res = await http.post(
-      "https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01"
+      "https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/ThongTinTaiKhoan",
+      { taiKhoan }
     );
-    dispatch(setProfileAction(res.data.content))
-
+    dispatch(setProfileAction(res.data.content));
   } catch (err) {
     console.log(err);
     navigateHistory.push("/login");
