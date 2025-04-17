@@ -13,13 +13,9 @@ const Login = () => {
     },
     onSubmit: async (values) => {
       const user = await dispatch(loginAction(values));
-      console.log(user)
+      console.log(user);
       if (user) {
-        if (user.maLoaiNguoiDung === "QuanTri") {
-          navigate(`/admin/${user.taiKhoan}`);
-        } else {
-          navigate("/");
-        }
+        navigate("/");
       }
     },
   });
