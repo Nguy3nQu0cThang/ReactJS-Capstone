@@ -30,7 +30,15 @@ const HeaderHomeAdmin = () => {
         >
           Trang chủ
         </Link>
-        
+        <Link to="/detail" className="text-black hover:text-blue-600">
+          Phim
+        </Link>
+        <Link to="/cinema" className="text-black hover:text-blue-600">
+          Rạp phim
+        </Link>
+        <Link to="/booking" className="text-black hover:text-blue-600">
+          Đặt vé
+        </Link>
         <Link
           to={`/admin/${userLogin.taiKhoan}/add`}
           className="text-black hover:text-blue-600 text-decoration-none"
