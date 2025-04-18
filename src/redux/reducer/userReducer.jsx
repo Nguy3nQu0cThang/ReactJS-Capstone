@@ -110,3 +110,32 @@ export const getProfileAction = (taiKhoan) => async (dispatch) => {
     navigateHistory.push("/login");
   }
 };
+
+export const updateProfileAction = (updatedUser) => {
+  return async (dispatch) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("userLogin"))?.accessToken;
+
+      const res = await http.put(
+        "https://movienew.cybersoft.edu.vn/api/QuanLyNguoiDung/CapNhatThongTinNguoiDung",
+        updatedUser,
+        {
+          headers: {
+            TokenCybersoft: "YOUR_CYBERSOFT_TOKEN",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      dispatch({
+        type: "UPDATE_PROFILE",
+        payload: res.data.content,
+      });
+
+      alert("Cập nhật thông tin thành công!");
+    } catch (error) {
+      console.error("Update failed:", error);
+      alert("Cập nhật thất bại!");
+    }
+  };
+};

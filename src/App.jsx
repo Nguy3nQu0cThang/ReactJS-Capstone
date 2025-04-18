@@ -23,6 +23,7 @@ import BookingTicketPage from "./pages/BookingTicketPage";
 import EditMovie from "./pages/EditMovie";
 import MovieManagement from "./component/ManagerPage/MovieManagement";
 import ProtectedAdminRoute from "./component/ManagerPage/ProtectedRoute";
+import EditProfile from "./pages/EditProfile";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => {
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
                 <Route path="profile/:taiKhoan" element={<UserProfile />} />
+                <Route path="edit/:taiKhoan" element={<EditProfile />} />
                 <Route path="detail" element={<DetailPage />} />
                 <Route path="detail/:maPhim" element={<DetailMovie />} />
                 <Route path="cinema" element={<CinemaPage />} />
