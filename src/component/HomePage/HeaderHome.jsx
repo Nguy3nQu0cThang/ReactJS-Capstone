@@ -39,16 +39,28 @@ const HeaderHome = () => {
       </div>
 
       <nav className="hidden lg:flex space-x-10">
-        <Link to="/" className="text-black hover:text-blue-600">
+        <Link
+          to="/"
+          className="text-black hover:text-blue-600 text-decoration-none"
+        >
           Trang chủ
         </Link>
-        <Link to="/detail" className="text-black hover:text-blue-600">
+        <Link
+          to="/detail"
+          className="text-black hover:text-blue-600 text-decoration-none"
+        >
           Phim
         </Link>
-        <Link to="/cinema" className="text-black hover:text-blue-600">
+        <Link
+          to="/cinema"
+          className="text-black hover:text-blue-600 text-decoration-none"
+        >
           Rạp phim
         </Link>
-        <Link to="/booking" className="text-black hover:text-blue-600">
+        <Link
+          to="/booking"
+          className="text-black hover:text-blue-600 text-decoration-none"
+        >
           Đặt vé
         </Link>
       </nav>
@@ -60,7 +72,7 @@ const HeaderHome = () => {
               onClick={() => setDropdownOpen((prev) => !prev)}
               className="flex items-center space-x-2 text-black focus:outline-none"
             >
-              <span>👤 {userLogin.hoTen}</span>
+              <span>👤 Xin chào{userLogin.hoTen}</span>
               <svg
                 className="w-4 h-4 ml-1"
                 fill="none"
@@ -76,7 +88,7 @@ const HeaderHome = () => {
               <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-md z-10">
                 <Link
                   to={`/profile/:${userLogin.taiKhoan}`}
-                  className="block px-4 py-2 hover:bg-gray-100 text-black"
+                  className="block px-4 py-2 hover:bg-gray-100 text-black text-decoration-none"
                   onClick={() => setDropdownOpen(false)}
                 >
                   Thông tin cá nhân
@@ -94,13 +106,13 @@ const HeaderHome = () => {
           <div className="flex space-x-4">
             <Link
               to="/login"
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-decoration-none"
             >
               Đăng Nhập
             </Link>
             <Link
               to="/register"
-              className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900"
+              className="px-4 py-2 bg-black text-white rounded hover:bg-gray-900 text-decoration-none"
             >
               Đăng Ký
             </Link>

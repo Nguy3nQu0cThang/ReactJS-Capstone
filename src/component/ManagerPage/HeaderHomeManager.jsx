@@ -32,22 +32,30 @@ const HeaderHomeAdmin = () => {
         >
           Trang chủ
         </Link>
-        <Link
+        {/* <Link
           to={`/admin/${userLogin.taiKhoan}`}
           className="text-black hover:text-blue-600 text-decoration-none"
         >
           Trang Admin
-        </Link>
-        <Link to="/detail" className="text-black hover:text-blue-600">
+        </Link> */}
+        <Link
+          to="/detail"
+          className="text-black hover:text-blue-600 text-decoration-none"
+        >
           Phim
         </Link>
-        <Link to="/cinema" className="text-black hover:text-blue-600">
+        <Link
+          to="/cinema"
+          className="text-black hover:text-blue-600 text-decoration-none"
+        >
           Rạp phim
         </Link>
-        <Link to="/booking" className="text-black hover:text-blue-600">
+        <Link
+          to="/booking"
+          className="text-black hover:text-blue-600 text-decoration-none"
+        >
           Đặt vé
         </Link>
-        
       </nav>
 
       <div className="relative">
@@ -57,7 +65,7 @@ const HeaderHomeAdmin = () => {
               className="cursor-pointer text-black font-medium flex items-center space-x-2"
               onClick={() => setDropdownOpen((prev) => !prev)}
             >
-              <span>👤 {userLogin.hoTen}</span>
+              <span>👤 Xin chào {userLogin.hoTen}</span>
               <svg
                 className={`w-4 h-4 transform transition-transform ${
                   dropdownOpen ? "rotate-180" : ""
@@ -75,21 +83,21 @@ const HeaderHomeAdmin = () => {
               <div className="absolute right-0 top-10 bg-white shadow-lg border rounded w-40 z-10">
                 <Link
                   to={`/profile/${userLogin.taiKhoan}`}
-                  className="block px-4 py-2 hover:bg-gray-100 text-black"
+                  className="block px-4 py-2 hover:bg-gray-100 text-black text-decoration-none"
                   onClick={() => setDropdownOpen(false)}
                 >
                   Thông tin cá nhân
                 </Link>
                 <Link
                   to={`/admin/${userLogin.taiKhoan}`}
-                  className="block px-4 py-2 hover:bg-gray-100 text-black"
+                  className="block px-4 py-2 hover:bg-gray-100 text-black text-decoration-none"
                   onClick={() => setDropdownOpen(false)}
                 >
-                  Tài khoản Admin
+                  Quản lý phim
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100 text-black"
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 text-black text-decoration-none"
                 >
                   Đăng xuất
                 </button>

@@ -19,6 +19,7 @@
   opacity: 1;
 }
 .movie-section {
+  border-radius: 1rem;
   padding-top: 3rem;
   padding-bottom: 3rem;
   background-color: #dda815;
