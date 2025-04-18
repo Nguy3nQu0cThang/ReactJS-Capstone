@@ -20,7 +20,7 @@ const HomePageMaster = () => {
     <div className="container mx-auto">
       {isAdmin ? <HeaderHomeManager /> : <HeaderHome />}
       {isHome && <Banner />}
-      <div className="container mx-auto px-4">
+      <div className="pt-3">
         <Outlet />
       </div>
     </div>
