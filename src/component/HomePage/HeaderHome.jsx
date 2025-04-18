@@ -72,7 +72,7 @@ const HeaderHome = () => {
               onClick={() => setDropdownOpen((prev) => !prev)}
               className="flex items-center space-x-2 text-black focus:outline-none"
             >
-              <span>👤 Xin chào{userLogin.hoTen}</span>
+              <span>👤 Xin chào {userLogin.hoTen}</span>
               <svg
                 className="w-4 h-4 ml-1"
                 fill="none"
