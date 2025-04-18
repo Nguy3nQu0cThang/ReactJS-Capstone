@@ -4,14 +4,16 @@ import { getListMovieOfCinemaAPI } from "../API/apiQuanLyRap";
 import BookingMovieList from "../component/BookingPage/BookingMovieList";
 import BookingCinemaList from "../component/BookingPage/BookingCinemaList";
 import BookingScheduleList from "../component/BookingPage/BookingScheduleList";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const BookingPage = () => {
-  const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedShowtime, setSelectedShowtime] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const movieFromState = location.state?.selectedMovie || null;
+  const [selectedMovie, setSelectedMovie] = useState(movieFromState);
 
   // Fetch toàn bộ lịch chiếu của các cụm rạp từ API
   const { data, isLoading, error } = useQuery({
@@ -40,6 +42,7 @@ const BookingPage = () => {
   const allMovies = Array.from(moviesMap.values());
 
   // Hàm hỗ trợ lọc
+
   const getMovieIdsByBranch = (branch) =>
     branch?.danhSachPhim.map((phim) => phim.maPhim) || [];
 

@@ -18,14 +18,14 @@ const MovieList = () => {
     gcTime: 1000 * 10,
   });
 
-  const handleBookingClick = async (maPhim) => {
+  const handleBookingClick = async (item) => {
     try {
-      const data = await getLichChieuTheoPhimAPI(maPhim);
+      const data = await getLichChieuTheoPhimAPI(item.maPhim);
       const firstLichChieu =
         data.heThongRapChieu?.[0]?.cumRapChieu?.[0]?.lichChieuPhim?.[0];
 
       if (firstLichChieu?.maLichChieu) {
-        navigate(`/booking/${firstLichChieu.maLichChieu}`);
+        navigate("/booking", { state: { selectedMovie: item } });
       } else {
         alert("Phim này chưa có lịch chiếu.");
       }
@@ -104,7 +104,7 @@ const MovieList = () => {
                   </Link>
                   <button
                     className="btn btn-sm btn-success"
-                    onClick={() => handleBookingClick(item.maPhim)}
+                    onClick={() => handleBookingClick(item)}
                   >
                     🎟️ Đặt vé
                   </button>

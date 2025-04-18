@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logoutAction } from "../../redux/reducer/userReducer";
 
 const HeaderHomeAdmin = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { userLogin } = useSelector((state) => state.userReducer);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleLogout = () => {
     dispatch(logoutAction());
+    navigate("/");
   };
 
   return (
@@ -45,12 +47,7 @@ const HeaderHomeAdmin = () => {
         <Link to="/booking" className="text-black hover:text-blue-600">
           Đặt vé
         </Link>
-        <Link
-          to={`/admin/${userLogin.taiKhoan}/add`}
-          className="text-black hover:text-blue-600 text-decoration-none"
-        >
-          Thêm phim
-        </Link>
+        
       </nav>
 
       <div className="relative">
@@ -82,6 +79,13 @@ const HeaderHomeAdmin = () => {
                   onClick={() => setDropdownOpen(false)}
                 >
                   Thông tin cá nhân
+                </Link>
+                <Link
+                  to={`/admin/${userLogin.taiKhoan}`}
+                  className="block px-4 py-2 hover:bg-gray-100 text-black"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Tài khoản Admin
                 </Link>
                 <button
                   onClick={handleLogout}
