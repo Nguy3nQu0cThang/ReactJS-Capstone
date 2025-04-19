@@ -2,8 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
-import { TOKEN_CYBERSOFT } from "../utils/setting";
-import dayjs from "dayjs";
+import { TOKEN, TOKEN_CYBERSOFT } from "../utils/setting";
 
 const EditMovie = () => {
   const params = useParams();
@@ -11,13 +10,14 @@ const EditMovie = () => {
   const navigate = useNavigate();
 
   console.log(maPhim);
+
   const movieForm = useFormik({
     initialValues: {
       maPhim: "",
       tenPhim: "",
       biDanh: "",
       trailer: "",
-      hinhAnh: "",
+      hinhAnh: null, // Thay đổi từ chuỗi thành null
       moTa: "",
       maNhom: "GP01",
       ngayKhoiChieu: "",
@@ -27,61 +27,44 @@ const EditMovie = () => {
       sapChieu: false,
     },
     onSubmit: async (values) => {
-      try {
-        const accessToken = localStorage.getItem("accessToken");
-    
-        // Nếu người dùng upload hình ảnh mới (kiểu File), thì dùng CapNhatPhimUpload
-        if (values.hinhAnh instanceof File) {
-          const formData = new FormData();
-          for (let key in values) {
-            if (key === "hinhAnh") {
-              formData.append("File", values.hinhAnh);
-            } else {
-              formData.append(key, values[key]);
-            }
-          }
-    
-          await axios.post(
-            "https://movienew.cybersoft.edu.vn/api/QuanLyPhim/CapNhatPhimUpload",
-            formData,
-            {
-              headers: {
-                TokenCybersoft: TOKEN_CYBERSOFT,
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
+      const formData = new FormData();
+
+      // Append tất cả các giá trị form vào FormData
+      for (const key in values) {
+        if (key === "hinhAnh" && values[key]) {
+          formData.append(key, values[key]); // append file nếu có
         } else {
-          // Nếu không có ảnh mới => giữ ảnh cũ + dùng CapNhatPhim
-          const payload = {
-            ...values,
-            maPhim: Number(values.maPhim),
-            moTa: values.moTa?.trim() || "Chưa có mô tả",
-            ngayKhoiChieu: dayjs(values.ngayKhoiChieu).format("DD/MM/YYYY"),
-          };
-    
-          await axios.put(
-            "https://movienew.cybersoft.edu.vn/api/QuanLyPhim/CapNhatPhim",
-            payload,
-            {
-              headers: {
-                TokenCybersoft: TOKEN_CYBERSOFT,
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-        }
-    
-        alert("Cập nhật thành công!");
-        navigate("../admin");
-      } catch (error) {
-        console.error("Lỗi cập nhật phim:", error);
-        if (error.response?.data?.content) {
-          alert("Chi tiết: " + error.response.data.content);
+          formData.append(key, values[key]);
         }
       }
+
+      try {
+        const res = await axios.post(
+          `https://movienew.cybersoft.edu.vn/api/QuanLyPhim/CapNhatPhimUpload`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data", // Đặt Content-Type là multipart/form-data
+              TokenCybersoft: TOKEN_CYBERSOFT,
+              Authorization: `Bearer ${localStorage.getItem(TOKEN)}`,
+            },
+          }
+        );
+        console.log(res);
+        alert("Cập nhật thành công!");
+        const userLogin = JSON.parse(localStorage.getItem("userLogin"));
+        const taiKhoan = userLogin ? userLogin.taiKhoan : null;
+        if (taiKhoan) {
+          navigate(`/admin/${taiKhoan}`);
+        } else {
+          alert("Tài khoản không hợp lệ!");
+        }
+        navigate(`/admin/${taiKhoan}`);
+
+      } catch (error) {
+        console.error("Lỗi cập nhật phim:", error);
+      }
     },
-    
   });
 
   const fetchMovieDetail = async () => {
@@ -102,12 +85,12 @@ const EditMovie = () => {
 
   useEffect(() => {
     fetchMovieDetail();
-  }, []);
+  }, [maPhim]);
 
   return (
     <div className="container mx-auto py-4">
       <h3 className="text-xl font-semibold mb-4">Edit Movie</h3>
-      <form onSubmit={movieForm.handleSubmit}>
+      <form onSubmit={movieForm.handleSubmit} encType="multipart/form-data">
         {[
           { label: "Mã phim", name: "maPhim" },
           { label: "Tên phim", name: "tenPhim" },
@@ -122,7 +105,7 @@ const EditMovie = () => {
             <input
               type={type}
               name={name}
-              value={movieForm.values[name]}
+              value={movieForm.values[name] || ""}
               onChange={movieForm.handleChange}
               className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
             />
@@ -131,15 +114,34 @@ const EditMovie = () => {
 
         <div className="mb-4">
           <label className="block text-gray-700">Hình ảnh</label>
-          <input
-            type="file"
-            name="hinhAnh"
-            accept="image/*"
-            onChange={(e) => {
-              movieForm.setFieldValue("hinhAnh", e.currentTarget.files[0]);
-            }}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-          />
+          <div className="flex items-center">
+            <input
+              type="text"
+              name="hinhAnh"
+              value={
+                movieForm.values.hinhAnh ? movieForm.values.hinhAnh.name : ""
+              }
+              readOnly
+              className="flex-grow px-4 py-2 border border-gray-300 rounded-l-md shadow-sm rounded me-1"
+            />
+            <button
+              type="button"
+              className="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 rounded me-1"
+              onClick={() => document.getElementById("fileInput").click()}
+            >
+              Chọn tệp
+            </button>
+            <input
+              id="fileInput"
+              type="file"
+              name="hinhAnh"
+              onChange={(event) => {
+                const file = event.currentTarget.files[0];
+                movieForm.setFieldValue("hinhAnh", file); // Lưu file vào form
+              }}
+              className="hidden"
+            />
+          </div>
         </div>
 
         <div className="flex gap-4 mb-4">

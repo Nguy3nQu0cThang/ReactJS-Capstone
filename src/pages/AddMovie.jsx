@@ -2,51 +2,86 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { TOKEN_CYBERSOFT } from "../utils/setting";
+import { useState } from "react";
 
 const AddMovie = () => {
   const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  // Hàm chuyển đổi định dạng ngày
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = ("0" + date.getDate()).slice(-2); // Lấy ngày và định dạng với 2 chữ số
+    const month = ("0" + (date.getMonth() + 1)).slice(-2); // Lấy tháng (tháng bắt đầu từ 0)
+    const year = date.getFullYear(); // Lấy năm
+
+    return `${day}/${month}/${year}`; // Trả về định dạng dd/MM/yyyy
+  };
 
   const movieForm = useFormik({
     initialValues: {
       maPhim: "",
       tenPhim: "",
       trailer: "",
-      hinhAnh: "",
       moTa: "",
       ngayKhoiChieu: "",
       danhGia: "",
+      dangChieu: false,
+      sapChieu: true,
+      hot: true,
     },
     onSubmit: async (values) => {
       try {
+        // Tạo formData để gửi
         const formData = new FormData();
-        formData.append("maPhim", values.maPhim);
         formData.append("tenPhim", values.tenPhim);
-        formData.append("biDanh", values.tenPhim.replace(/\s+/g, "-").toLowerCase()); // tạo bí danh đơn giản
         formData.append("trailer", values.trailer);
-        formData.append("hinhAnh", values.hinhAnh); // nếu là file, dùng .append("File", file)
         formData.append("moTa", values.moTa);
-        formData.append("maNhom", "GP01");
-        formData.append("ngayKhoiChieu", values.ngayKhoiChieu);
+
+        // Sử dụng hàm formatDate để chuyển ngày sang định dạng dd/MM/yyyy
+        formData.append("ngayKhoiChieu", formatDate(values.ngayKhoiChieu));
+
         formData.append("danhGia", values.danhGia);
-    
+        formData.append("dangChieu", values.dangChieu);
+        formData.append("sapChieu", values.sapChieu);
+        formData.append("hot", values.hot);
+
+        if (selectedImage) {
+          formData.append("hinhAnh", selectedImage, selectedImage.name);
+        } else {
+          alert("Vui lòng chọn hình ảnh!");
+          return;
+        }
+
+        // Kiểm tra các giá trị trong formData trước khi gửi
+        for (let [key, value] of formData.entries()) {
+          console.log(`${key}: ${value}`);
+        }
+
+        // Gửi yêu cầu POST đến API
         const res = await axios.post(
           "https://movienew.cybersoft.edu.vn/api/QuanLyPhim/ThemPhimUploadHinh",
           formData,
           {
             headers: {
-              TokenCybersoft: TOKEN_CYBERSOFT,
-              "Content-Type": "multipart/form-data",
+              TokenCyberSoft: TOKEN_CYBERSOFT,
             },
           }
         );
-        console.log(res)
+
+        console.log(res);
         alert("Thêm phim thành công!");
-        navigate("/admin");
+        const userLogin = JSON.parse(localStorage.getItem("userLogin"));
+        const taiKhoan = userLogin ? userLogin.taiKhoan : null;
+        if (taiKhoan) {
+          navigate(`/admin/${taiKhoan}`);
+        } else {
+          alert("Tài khoản không hợp lệ!");
+        }
+                navigate(`/admin/${taiKhoan}`);
+
       } catch (error) {
         console.error("Lỗi thêm phim:", error);
-        if (error.response) {
-          console.error("Chi tiết lỗi:", error.response.data);
-        }
         alert("Thêm phim thất bại!");
       }
     },
@@ -57,7 +92,7 @@ const AddMovie = () => {
       <h3 className="text-xl font-semibold mb-4">Thêm phim mới</h3>
       <form onSubmit={movieForm.handleSubmit}>
         <div className="grid grid-cols-2 gap-4">
-          <div>
+          {/* <div>
             <label className="block">Mã phim</label>
             <input
               name="maPhim"
@@ -65,7 +100,7 @@ const AddMovie = () => {
               className="form-control"
               onChange={movieForm.handleChange}
             />
-          </div>
+          </div> */}
           <div>
             <label className="block">Tên phim</label>
             <input
@@ -85,12 +120,16 @@ const AddMovie = () => {
             />
           </div>
           <div>
-            <label className="block">Hình ảnh (URL)</label>
+            <label className="block">Hình ảnh</label>
             <input
               name="hinhAnh"
-              type="text"
+              type="file"
+              accept="image/*"
               className="form-control"
-              onChange={movieForm.handleChange}
+              onChange={(e) => {
+                const file = e.currentTarget.files[0];
+                setSelectedImage(file);
+              }}
             />
           </div>
           <div className="col-span-2">
@@ -122,6 +161,7 @@ const AddMovie = () => {
             />
           </div>
         </div>
+
         <button
           type="submit"
           className="mt-4 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
