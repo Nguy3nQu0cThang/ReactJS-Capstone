@@ -3,13 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
 import { TOKEN_CYBERSOFT } from "../utils/setting";
+// import dayjs from "dayjs";
 
 const EditMovie = () => {
-  const params = useParams(); 
+  const params = useParams();
   const { maPhim } = params;
   const navigate = useNavigate();
 
-  console.log(maPhim)
+  console.log(maPhim);
   const movieForm = useFormik({
     initialValues: {
       maPhim: "",
@@ -27,19 +28,42 @@ const EditMovie = () => {
     },
     onSubmit: async (values) => {
       try {
-        await axios.put(
-          `https://movienew.cybersoft.edu.vn/api/QuanLyPhim/CapNhatPhimUpload`,
-          values,
+        const accessToken = localStorage.getItem("accessToken"); // hoặc lấy từ Redux: userLogin.accessToken
+        const formData = new FormData();
+
+        for (let key in values) {
+          if (key === "hinhAnh") {
+            if (values.hinhAnh instanceof File) {
+              formData.append("File", values.hinhAnh); // KEY là "File"
+            }
+          } else {
+            formData.append(key, values[key]);
+          }
+        }
+
+        console.log("FormData gửi đi:");
+        for (let [key, val] of formData.entries()) {
+          console.log(`${key}:`, val);
+        }
+
+        await axios.post(
+          "https://movienew.cybersoft.edu.vn/api/QuanLyPhim/CapNhatPhimUpload",
+          formData,
           {
             headers: {
               TokenCybersoft: TOKEN_CYBERSOFT,
+              Authorization: `Bearer ${accessToken}`,
             },
           }
         );
+
         alert("Cập nhật thành công!");
         navigate("../admin");
       } catch (error) {
         console.error("Lỗi cập nhật phim:", error);
+        if (error.response?.data?.content) {
+          console.error("Chi tiết:", error.response.data.content);
+        }
       }
     },
   });
@@ -73,7 +97,6 @@ const EditMovie = () => {
           { label: "Tên phim", name: "tenPhim" },
           { label: "Bí danh", name: "biDanh" },
           { label: "Trailer", name: "trailer" },
-          { label: "Hình ảnh", name: "hinhAnh" },
           { label: "Mô tả", name: "moTa" },
           { label: "Ngày khởi chiếu", name: "ngayKhoiChieu", type: "date" },
           { label: "Đánh giá", name: "danhGia", type: "number" },
@@ -89,6 +112,19 @@ const EditMovie = () => {
             />
           </div>
         ))}
+
+        <div className="mb-4">
+          <label className="block text-gray-700">Hình ảnh</label>
+          <input
+            type="file"
+            name="hinhAnh"
+            accept="image/*"
+            onChange={(e) => {
+              movieForm.setFieldValue("hinhAnh", e.currentTarget.files[0]);
+            }}
+            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+          />
+        </div>
 
         <div className="flex gap-4 mb-4">
           {[
