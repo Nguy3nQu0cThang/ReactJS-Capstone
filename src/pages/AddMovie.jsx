@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import { TOKEN_CYBERSOFT } from "../utils/setting";
+import { TOKEN, TOKEN_CYBERSOFT } from "../utils/setting";
 import { useState } from "react";
 
 const AddMovie = () => {
@@ -29,6 +29,9 @@ const AddMovie = () => {
       dangChieu: false,
       sapChieu: true,
       hot: true,
+      maRap: "",
+      giaVe: "",
+      gioChieu: "",
     },
     onSubmit: async (values) => {
       try {
@@ -69,6 +72,29 @@ const AddMovie = () => {
           }
         );
 
+        const maPhim = response.data.content.maPhim;
+
+        // Chuẩn bị lịch chiếu
+        const ngayGioChieu = `${formatDate(values.ngayKhoiChieu)} ${
+          values.gioChieu
+        }`;
+
+        // Gọi API tạo lịch chiếu
+        await axios.post(
+          "https://movienew.cybersoft.edu.vn/api/QuanLyDatVe/TaoLichChieu",
+          {
+            maPhim,
+            maRap: values.maRap,
+            ngayChieuGioChieu: ngayGioChieu,
+            giaVe: Number(values.giaVe),
+          },
+          {
+            headers: {
+              TokenCyberSoft: TOKEN_CYBERSOFT,
+              Authorization: `Bearer ${TOKEN}`,
+            },
+          }
+        );
         console.log(res);
         alert("Thêm phim thành công!");
         const userLogin = JSON.parse(localStorage.getItem("userLogin"));
@@ -78,8 +104,7 @@ const AddMovie = () => {
         } else {
           alert("Tài khoản không hợp lệ!");
         }
-                navigate(`/admin/${taiKhoan}`);
-
+        navigate(`/admin/${taiKhoan}`);
       } catch (error) {
         console.error("Lỗi thêm phim:", error);
         alert("Thêm phim thất bại!");
@@ -149,6 +174,34 @@ const AddMovie = () => {
               onChange={movieForm.handleChange}
             />
           </div>
+          <div className="col-span-2">
+            <label className="block">Mã rạp</label>
+            <input
+              name="maRap"
+              type="text"
+              className="form-control"
+              onChange={movieForm.handleChange}
+            />
+          </div>
+          <div>
+            <label className="block">Giá vé</label>
+            <input
+              name="giaVe"
+              type="number"
+              className="form-control"
+              onChange={movieForm.handleChange}
+            />
+          </div>
+          <div>
+            <label className="block">Giờ chiếu (HH:mm)</label>
+            <input
+              name="gioChieu"
+              type="time"
+              className="form-control"
+              onChange={movieForm.handleChange}
+            />
+          </div>
+
           <div>
             <label className="block">Đánh giá</label>
             <input
