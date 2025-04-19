@@ -72,7 +72,7 @@ const AddMovie = () => {
           }
         );
 
-        const maPhim = response.data.content.maPhim;
+        const maPhim = res.data.content.maPhim;
 
         // Chuẩn bị lịch chiếu
         const ngayGioChieu = `${formatDate(values.ngayKhoiChieu)} ${
@@ -91,7 +91,7 @@ const AddMovie = () => {
           {
             headers: {
               TokenCyberSoft: TOKEN_CYBERSOFT,
-              Authorization: `Bearer ${TOKEN}`,
+              Authorization: `Bearer ${localStorage.getItem(TOKEN)}`,
             },
           }
         );
