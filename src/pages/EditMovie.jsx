@@ -1,12 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
 import { TOKEN, TOKEN_CYBERSOFT } from "../utils/setting";
-
+import dayjs from "dayjs";
 const EditMovie = () => {
   const params = useParams();
   const { maPhim } = params;
+  const [lichChieu, setLichChieu] = useState([]);
+  const [newSchedule, setNewSchedule] = useState({
+    maRap: "",
+    ngayChieuGioChieu: "",
+    giaVe: "",
+  });
   const navigate = useNavigate();
 
   console.log(maPhim);
@@ -60,9 +66,9 @@ const EditMovie = () => {
           alert("Tài khoản không hợp lệ!");
         }
         navigate(`/admin/${taiKhoan}`);
-
       } catch (error) {
         console.error("Lỗi cập nhật phim:", error);
+        console.log("Chi tiết lỗi: ", error.response.data);
       }
     },
   });
@@ -82,10 +88,62 @@ const EditMovie = () => {
       console.error("Lỗi lấy chi tiết phim:", error);
     }
   };
+  const fetchLichChieu = async () => {
+    try {
+      const res = await axios.get(
+        `https://movienew.cybersoft.edu.vn/api/QuanLyRap/LayThongTinLichChieuPhim?MaPhim=${maPhim}`,
+        {
+          headers: {
+            TokenCybersoft: TOKEN_CYBERSOFT,
+          },
+        }
+      );
+      setLichChieu(res.data.content.heThongRapChieu || []);
+    } catch (error) {
+      console.error("Lỗi lấy lịch chiếu:", error);
+    }
+  };
 
   useEffect(() => {
     fetchMovieDetail();
+    fetchLichChieu();
   }, [maPhim]);
+
+  const handleAddSchedule = async () => {
+    try {
+      const payload = {
+        maPhim: Number(movieForm.values.maPhim),
+        maRap: newSchedule.maRap,
+        ngayChieuGioChieu: dayjs(newSchedule.ngayChieuGioChieu).format(
+          "DD/MM/YYYY HH:mm:ss"
+        ),
+        giaVe: Number(newSchedule.giaVe),
+      };
+
+      console.log("Payload gửi đi:", payload);
+
+      await axios.post(
+        "https://movienew.cybersoft.edu.vn/api/QuanLyDatVe/TaoLichChieu",
+        payload,
+        {
+          headers: {
+            TokenCybersoft: TOKEN_CYBERSOFT,
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        }
+      );
+
+      alert("Thêm lịch chiếu thành công!");
+      fetchLichChieu();
+    } catch (error) {
+      console.error("Lỗi thêm lịch chiếu:", error);
+      if (error.response?.data?.content) {
+        alert(`Lỗi: ${error.response.data.content}`);
+      } else {
+        alert("Thêm lịch chiếu thất bại!");
+      }
+    }
+  };
 
   return (
     <div className="container mx-auto py-4">
@@ -167,6 +225,62 @@ const EditMovie = () => {
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
         >
           Cập nhật phim
+        </button>
+        <h4 className="text-xl font-semibold mt-6 mb-2">
+          Lịch chiếu hiện tại:
+        </h4>
+        {lichChieu.length === 0 ? (
+          <p className="text-gray-600">Chưa có lịch chiếu</p>
+        ) : (
+          lichChieu.map((rap) =>
+            rap.cumRapChieu.map((cumRap) =>
+              cumRap.lichChieuPhim.map((lich) => (
+                <div key={lich.maLichChieu} className="p-2 mb-2 border rounded">
+                  🎥 {lich.tenRap} - 🕒 {lich.ngayChieuGioChieu} - 💰{" "}
+                  {lich.giaVe.toLocaleString()}đ
+                </div>
+              ))
+            )
+          )
+        )}
+
+        <h4 className="text-xl font-semibold mt-6 mb-2">
+          Thêm lịch chiếu mới:
+        </h4>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <input
+            type="text"
+            placeholder="Mã rạp (vd: cgv-crescent)"
+            className="border rounded px-3 py-2"
+            onChange={(e) =>
+              setNewSchedule({ ...newSchedule, maRap: e.target.value })
+            }
+          />
+          <input
+            type="datetime-local"
+            className="border rounded px-3 py-2"
+            onChange={(e) =>
+              setNewSchedule({
+                ...newSchedule,
+                ngayChieuGioChieu: e.target.value,
+              })
+            }
+          />
+          <input
+            type="number"
+            placeholder="Giá vé"
+            className="border rounded px-3 py-2"
+            onChange={(e) =>
+              setNewSchedule({ ...newSchedule, giaVe: e.target.value })
+            }
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          onClick={handleAddSchedule}
+        >
+          ➕ Thêm lịch chiếu
         </button>
       </form>
     </div>
