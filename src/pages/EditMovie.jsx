@@ -128,7 +128,7 @@ const EditMovie = () => {
         {
           headers: {
             TokenCybersoft: TOKEN_CYBERSOFT,
-            Authorization: `Bearer ${TOKEN}`,
+            Authorization: `Bearer ${localStorage.getItem(TOKEN)}`,
           },
         }
       );
