@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import { TOKEN, TOKEN_CYBERSOFT } from "../utils/setting";
+import { TOKEN_CYBERSOFT } from "../utils/setting";
 import { useState } from "react";
 
 const AddMovie = () => {
@@ -29,9 +29,6 @@ const AddMovie = () => {
       dangChieu: false,
       sapChieu: true,
       hot: true,
-      maRap: "",
-      giaVe: "",
-      gioChieu: "",
     },
     onSubmit: async (values) => {
       try {
@@ -48,9 +45,9 @@ const AddMovie = () => {
         formData.append("dangChieu", values.dangChieu);
         formData.append("sapChieu", values.sapChieu);
         formData.append("hot", values.hot);
-
+        formData.append("maNhom", "GP01");
         if (selectedImage) {
-          formData.append("hinhAnh", selectedImage, selectedImage.name);
+          formData.append("File", selectedImage, selectedImage.name);
         } else {
           alert("Vui lòng chọn hình ảnh!");
           return;
@@ -61,40 +58,21 @@ const AddMovie = () => {
           console.log(`${key}: ${value}`);
         }
 
+        if (!(selectedImage instanceof File)) {
+          alert("Ảnh không hợp lệ, vui lòng chọn lại!");
+          return;
+        }
         // Gửi yêu cầu POST đến API
         const res = await axios.post(
           "https://movienew.cybersoft.edu.vn/api/QuanLyPhim/ThemPhimUploadHinh",
           formData,
           {
             headers: {
-              TokenCyberSoft: TOKEN_CYBERSOFT,
+              TokenCybersoft: TOKEN_CYBERSOFT,
             },
           }
         );
 
-        const maPhim = res.data.content.maPhim;
-
-        // Chuẩn bị lịch chiếu
-        const ngayGioChieu = `${formatDate(values.ngayKhoiChieu)} ${
-          values.gioChieu
-        }`;
-
-        // Gọi API tạo lịch chiếu
-        await axios.post(
-          "https://movienew.cybersoft.edu.vn/api/QuanLyDatVe/TaoLichChieu",
-          {
-            maPhim,
-            maRap: values.maRap,
-            ngayChieuGioChieu: ngayGioChieu,
-            giaVe: Number(values.giaVe),
-          },
-          {
-            headers: {
-              TokenCyberSoft: TOKEN_CYBERSOFT,
-              Authorization: `Bearer ${localStorage.getItem(TOKEN)}`,
-            },
-          }
-        );
         console.log(res);
         alert("Thêm phim thành công!");
         const userLogin = JSON.parse(localStorage.getItem("userLogin"));
@@ -174,34 +152,6 @@ const AddMovie = () => {
               onChange={movieForm.handleChange}
             />
           </div>
-          <div className="col-span-2">
-            <label className="block">Mã rạp</label>
-            <input
-              name="maRap"
-              type="text"
-              className="form-control"
-              onChange={movieForm.handleChange}
-            />
-          </div>
-          <div>
-            <label className="block">Giá vé</label>
-            <input
-              name="giaVe"
-              type="number"
-              className="form-control"
-              onChange={movieForm.handleChange}
-            />
-          </div>
-          <div>
-            <label className="block">Giờ chiếu (HH:mm)</label>
-            <input
-              name="gioChieu"
-              type="time"
-              className="form-control"
-              onChange={movieForm.handleChange}
-            />
-          </div>
-
           <div>
             <label className="block">Đánh giá</label>
             <input
