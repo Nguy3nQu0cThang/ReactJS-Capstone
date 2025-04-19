@@ -18,20 +18,35 @@ const AddMovie = () => {
     },
     onSubmit: async (values) => {
       try {
+        const formData = new FormData();
+        formData.append("maPhim", values.maPhim);
+        formData.append("tenPhim", values.tenPhim);
+        formData.append("biDanh", values.tenPhim.replace(/\s+/g, "-").toLowerCase()); // tạo bí danh đơn giản
+        formData.append("trailer", values.trailer);
+        formData.append("hinhAnh", values.hinhAnh); // nếu là file, dùng .append("File", file)
+        formData.append("moTa", values.moTa);
+        formData.append("maNhom", "GP01");
+        formData.append("ngayKhoiChieu", values.ngayKhoiChieu);
+        formData.append("danhGia", values.danhGia);
+    
         const res = await axios.post(
           "https://movienew.cybersoft.edu.vn/api/QuanLyPhim/ThemPhimUploadHinh",
-          values,
+          formData,
           {
             headers: {
-              TokenCyberSoft: TOKEN_CYBERSOFT,
+              TokenCybersoft: TOKEN_CYBERSOFT,
+              "Content-Type": "multipart/form-data",
             },
           }
         );
-        console.log(res);
+        console.log(res)
         alert("Thêm phim thành công!");
         navigate("/admin");
       } catch (error) {
         console.error("Lỗi thêm phim:", error);
+        if (error.response) {
+          console.error("Chi tiết lỗi:", error.response.data);
+        }
         alert("Thêm phim thất bại!");
       }
     },
